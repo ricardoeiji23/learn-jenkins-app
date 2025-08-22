@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         NETLIFY_SITE_ID = 'af71623f-489d-4acc-accd-d48672d4dcf8' 
+        NETLIFY_AUTH_TOKEN = credentials('netlify-token')
     }
 
     stages {
@@ -49,7 +50,7 @@ pipeline {
             }
 
         // --------------------------------
-           /* parallel {
+           /* parallel { // This is from his video and I couldn't see all
                 stage('Unit tests') {
                     agent {
                         docker {
@@ -99,20 +100,20 @@ pipeline {
             }*/
 
             // -------------------------------------
-            // agent {
-            //     docker {
-            //         image 'node:18-alpine'
-            //         reuseNode true
-            //     }
-            // }
+            /*agent { // This is ok
+                docker {
+                    image 'node:18-alpine'
+                    reuseNode true
+                }
+            }
 
     
-            // steps {
-            //     sh '''
-            //         test -f build/index.html 
-            //         npm test 
-            //     '''
-            // }
+            steps {
+                sh '''
+                    test -f build/index.html 
+                    npm test 
+                '''
+            }*/
         }
 
         stage('Deploy') {
@@ -128,6 +129,7 @@ pipeline {
                     npm install netlify-cli
                     node_modules/.bin/netlify --version
                     echo "Deploying to production. Site ID: $NETLIFY_SITE_ID"
+                    node_modules/.bin/netlify status
                 '''
             }
         }
