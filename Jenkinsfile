@@ -27,7 +27,29 @@ pipeline {
         }
 
         stage('Test') {
-            parallel {
+            agent {
+                docker {
+                    image 'node:18-alpine'
+                    reuseNode true
+                }
+            }
+
+            steps {
+                sh '''
+                    echo "running tests..."
+                    npm ci
+                    npm test 
+                '''
+            }
+            
+            post {
+                always {
+                    junit '**/junit.xml'
+                }
+            }
+
+        // --------------------------------
+           /* parallel {
                 stage('Unit tests') {
                     agent {
                         docker {
@@ -74,7 +96,9 @@ pipeline {
 
                 }
 
-            }
+            }*/
+
+            // -------------------------------------
             // agent {
             //     docker {
             //         image 'node:18-alpine'
