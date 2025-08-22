@@ -4,6 +4,8 @@ pipeline {
     environment {
         NETLIFY_SITE_ID = 'af71623f-489d-4acc-accd-d48672d4dcf8' 
         NETLIFY_AUTH_TOKEN = credentials('netlify-token')
+        npm_config_script_shell = '/bin/sh'
+}
     }
 
     stages {
@@ -11,10 +13,10 @@ pipeline {
         stage('Build') {
             agent {
                 docker {
-                    image 'node:18-alpine'
+                    image 'node:18'
                     reuseNode true
                 }
-            }
+            }   
             steps {
                 sh '''
                     ls -la
