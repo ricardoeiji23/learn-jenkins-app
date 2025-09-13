@@ -22,13 +22,13 @@ pipeline {
         }
 
         stage('Test') {
-            agent {
-                docker {
+            agent { 
+                docker { // We are using the Docker image so we have access to the NodeJS runtime environment 
                     image 'node:18-alpine'
                     reuseNode true
                 }
             }
-            
+
             steps {
                 sh '''
                     test -f build/index.html
@@ -38,6 +38,13 @@ pipeline {
         }
 
     }
+
+    // post {
+    //     always {
+    //         junit 'test-results/junit.xml'
+    //     }
+    // }
+
 }
 
 
